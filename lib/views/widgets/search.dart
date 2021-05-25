@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:real_estate/data/data.dart';
+import 'package:real_estate/views/screens/screens.dart';
+import 'package:real_estate/views/widgets/widgets.dart';
 
 class Search extends StatefulWidget {
   @override
@@ -100,12 +102,17 @@ class _SearchState extends State<Search> {
                     ],
                   ),
                 )),
-                Padding(
-                  padding: EdgeInsets.only(left: 16.0, right: 24.0),
-                  child: Text(
-                    "Filters",
-                    style:
-                        TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+                GestureDetector(
+                  onTap: () {
+                    _showBottomSheet();
+                  },
+                  child: Padding(
+                    padding: EdgeInsets.only(left: 16.0, right: 24.0),
+                    child: Text(
+                      "Filters",
+                      style: TextStyle(
+                          fontSize: 18.0, fontWeight: FontWeight.bold),
+                    ),
                   ),
                 )
               ],
@@ -176,66 +183,152 @@ class _SearchState extends State<Search> {
     }
     return list;
   }
-}
 
-Widget buildProperty(Property property, int index) {
-  return Card(
-    margin: EdgeInsets.only(bottom: 24.0),
-    clipBehavior: Clip.antiAlias,
-    shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(15))),
-    child: Container(
-      height: 210.0,
-      decoration: BoxDecoration(
-          image: DecorationImage(
-              image: AssetImage(property.frontImage), fit: BoxFit.cover)),
-      child: Container(
-        padding: EdgeInsets.all(20.0),
-        decoration: BoxDecoration(
-            gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                stops: [0.0, 1.0],
-                colors: [Colors.transparent, Colors.black.withOpacity(0.7)])),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              decoration: BoxDecoration(
-                  color: Colors.yellow[700],
-                  borderRadius: BorderRadius.circular(5)),
-              width: 80.0,
-              padding: EdgeInsets.symmetric(vertical: 4),
-              child: Center(
-                child: Text("For" + property.label,
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 14.0,
-                        fontWeight: FontWeight.bold)),
-              ),
-            ),
-            Column(
+  Widget buildProperty(Property property, int index) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => Detail(property: property)));
+      },
+      child: Card(
+        margin: EdgeInsets.only(bottom: 24.0),
+        clipBehavior: Clip.antiAlias,
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(15))),
+        child: Container(
+          height: 210.0,
+          decoration: BoxDecoration(
+              image: DecorationImage(
+                  image: AssetImage(property.frontImage), fit: BoxFit.cover)),
+          child: Container(
+            padding: EdgeInsets.all(20.0),
+            decoration: BoxDecoration(
+                gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    stops: [
+                  0.0,
+                  1.0
+                ],
+                    colors: [
+                  Colors.transparent,
+                  Colors.black.withOpacity(0.7)
+                ])),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(property.name,
+                Container(
+                  decoration: BoxDecoration(
+                      color: Colors.yellow[700],
+                      borderRadius: BorderRadius.circular(5)),
+                  width: 80.0,
+                  padding: EdgeInsets.symmetric(vertical: 4),
+                  child: Center(
+                    child: Text("FOR" + property.label,
                         style: TextStyle(
                             color: Colors.white,
-                            fontSize: 18,
+                            fontSize: 14.0,
                             fontWeight: FontWeight.bold)),
-                    Text(property.name,
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold))
+                  ),
+                ),
+                Expanded(child: Container()),
+                Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(property.name,
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold)),
+                        Text(r"$" + property.price,
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold))
+                      ],
+                    ),
+                    SizedBox(
+                      height: 4,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          children: [
+                            Icon(Icons.location_on,
+                                color: Colors.white, size: 30.0),
+                            SizedBox(
+                              width: 4.0,
+                            ),
+                            Text(
+                              property.location,
+                              style: TextStyle(
+                                  color: Colors.white, fontSize: 14.0),
+                            ),
+                            SizedBox(
+                              width: 8,
+                            ),
+                            Icon(Icons.zoom_out_map,
+                                color: Colors.white, size: 30.0),
+                            SizedBox(
+                              width: 4.0,
+                            ),
+                            Text(
+                              property.sqm + "sq/m",
+                              style: TextStyle(
+                                  color: Colors.white, fontSize: 14.0),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Icon(
+                              Icons.star,
+                              color: Colors.yellow[700],
+                              size: 14.0,
+                            ),
+                            SizedBox(
+                              width: 4.0,
+                            ),
+                            Text(property.review + " Reviews",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 14.0,
+                                )),
+                          ],
+                        ),
+                      ],
+                    )
                   ],
                 )
               ],
-            )
-          ],
+            ),
+          ),
         ),
       ),
-    ),
-  );
+    );
+  }
+
+  void _showBottomSheet() {
+    showModalBottomSheet(
+        context: context,
+        isScrollControlled: true,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(30),
+            topRight: Radius.circular(30),
+          ),
+        ),
+        builder: (BuildContext context) {
+          return Wrap(
+            children: [
+              Filter(),
+            ],
+          );
+        });
+  }
 }
